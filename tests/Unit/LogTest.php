@@ -10,7 +10,7 @@ class LogTest extends TestCase
 
 	public function setUp()
 	{
-		$this->instance = new Log(__DIR__ . '/../var/', 'Y-m-d H:i:s', 'log', false);
+		$this->instance = new Log(__DIR__ . '/../var/', 'Y-m-d H:i:s', 'log', true);
 	}
 
 	public function testInstance()
@@ -23,5 +23,12 @@ class LogTest extends TestCase
 		$this->instance->error('Message error');
 		$this->instance->warning('Message warning');
 		$this->instance->someExample('Message warning');
+		$this->assertTrue(true);
 	}
+
+	public function testGetInstance()
+	{
+		$this->assertTrue(Log::getInstance('tests') instanceof ILog);
+	}
+
 }
