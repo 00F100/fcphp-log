@@ -31,4 +31,18 @@ class LogTest extends TestCase
 		$this->assertTrue(Log::getInstance('tests') instanceof ILog);
 	}
 
+	public function testInstanceDebugFalse()
+	{
+		$instance = new Log(__DIR__ . '/../var/', 'Y-m-d H:i:s', 'log');
+		$this->assertTrue($instance->someExample('Message warning'));
+	}
+
+	/**
+     * @expectedException FcPhp\Log\Exceptions\NotPermissionToWriteException
+     */
+	public function testNotPermissionDir()
+	{
+		$instance = new Log('/root', 'Y-m-d H:i:s', 'log');
+	}
+
 }

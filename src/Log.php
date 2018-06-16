@@ -3,7 +3,7 @@
 namespace FcPhp\Log
 {
 	use FcPhp\Log\Interfaces\ILog;
-	use FcPhp\Log\Exceptions\NotPermissionException;
+	use FcPhp\Log\Exceptions\NotPermissionToWriteException;
 
 	class Log implements ILog
 	{
@@ -37,13 +37,16 @@ namespace FcPhp\Log
 		/**
 		 * Method to return instance of Log
 		 *
-		 * @param string $directory Directory to write logs
+		 * @param string $directoryOutput Directory to write logs
+		 * @param string|bool $dateFormat Format of date to print log. If `false` not print date
+		 * @param string $extension Extension of file log
+		 * @param bool $debug Enable debug mode
 		 * @return FcPhp\Log\Interfaces\ILog
 		 */
-		public static function getInstance(string $directory, string $dateFormat = 'Y-m-d H:i:s', string $extension = 'log', bool $debug = false)
+		public static function getInstance(string $directoryOutput, $dateFormat = 'Y-m-d H:i:s', string $extension = 'log', bool $debug = false) :ILog
 		{
 			if(!self::$instance instanceof ILog) {
-				self::$instance = new Log($directory, $dateFormat, $extension, $debug);
+				self::$instance = new Log($directoryOutput, $dateFormat, $extension, $debug);
 			}
 			return self::$instance;
 		}
@@ -73,7 +76,7 @@ namespace FcPhp\Log
 		 */
 		public function __call($method, array $args = [])
 		{
-			$this->write($method, current($args));
+			return $this->write($method, current($args));
 		}
 
 		/**
@@ -83,7 +86,7 @@ namespace FcPhp\Log
 		 * @param string $logText Text to log
 		 * @return void
 		 */
-		private function write(string $fileName, string $logText)
+		public function write(string $fileName, string $logText)
 		{
 			if(!$this->debug && !in_array($fileName, $this->nonDebug)) {
 				return true;
@@ -94,6 +97,7 @@ namespace FcPhp\Log
 			}
 			$fopen = fopen($file, 'a');
 			fwrite($fopen, $this->getDatetime() . $logText . "\r\n");
+			fclose($fopen);
 		}
 
 		/**
@@ -110,7 +114,7 @@ namespace FcPhp\Log
 		 * Method to verify if directory is writable
 		 *
 		 * @param string $directory Directory to verity
-		 * @throws FcPhp\Log\Exceptions\NotPermissionException
+		 * @throws FcPhp\Log\Exceptions\NotPermissionToWriteException
 		 * @return void
 		 */
 		private function isWritable(string $directory) :void
