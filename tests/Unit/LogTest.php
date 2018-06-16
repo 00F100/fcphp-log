@@ -50,4 +50,12 @@ class LogTest extends TestCase
 		$instance = new Log('/root', 'Y-m-d H:i:s', 'log');
 	}
 
+	public function testCustomLog()
+	{
+		$this->assertTrue($this->instance->customLog(function(string $dateTime, string $logText, string $breakLine) {
+			return $logText . ' ' . $dateTime . $breakLine;
+		}) instanceof ILog);
+		$this->instance->error('Error custom log');
+	}
+
 }

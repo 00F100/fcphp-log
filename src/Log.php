@@ -10,7 +10,7 @@ namespace FcPhp\Log
 		/**
 		 * @var array
 		 */
-		private $nonDebug = ['error', 'warning'];
+		private $nonDebug = ['error', 'warning', 'exception'];
 
 		/**
 		 * @var bool
@@ -33,6 +33,11 @@ namespace FcPhp\Log
 		 * @var FcPhp\Log\Interfaces\ILog
 		 */
 		private static $instance;
+
+		/**
+		 * @var object
+		 */
+		private $customLog;
 
 		/**
 		 * Method to return instance of Log
@@ -96,7 +101,7 @@ namespace FcPhp\Log
 				$this->isWritable($file);
 			}
 			$fopen = fopen($file, 'a');
-			fwrite($fopen, $this->getDatetime() . $logText . "\r\n");
+			fwrite($fopen, $this->createLog($this->getDatetime(), $logText, "\r\n"));
 			fclose($fopen);
 		}
 
@@ -122,6 +127,40 @@ namespace FcPhp\Log
 			if(!is_writable($directory)) {
 				throw new NotPermissionToWriteException($directory);
 			}
+		}
+
+		/**
+		 * Method to configure custom log
+		 *
+		 * @param object $closure
+		 * @return FcPhp\Log\Interfaces\ILog
+		 */
+		public function customLog($clousure) :ILog
+		{
+			$this->customLog = $clousure;
+			return $this;
+		}
+
+		/**
+		 * Method to create log
+		 *
+		 * @param string|null $dateTime Date time to log
+		 * @param string $logText Text to put in file log
+		 * @param string $breakLine The break of line
+		 * @return string
+		 */
+		private function createLog(?string $dateTime, string $logText, string $breakLine) :string
+		{
+			if(gettype($this->customLog) == 'object') {
+				$customLog = $this->customLog;
+				return $customLog($dateTime, $logText, $breakLine);
+			}
+			$log = '';
+			if(!empty($dateTime)) {
+				$log = $dateTime;
+			}
+			$log .= $logText . $breakLine;
+			return $log;
 		}
 	}
 }

@@ -68,3 +68,22 @@ $log->fooBar('message foo bar');
 // [2018-06-16 04:06:25] message foo bar
 
 ```
+
+### Custom format log
+
+```php
+<?php
+
+use \FcPhp\Log\Log;
+
+$log = Log::getInstance('var/log', 'Y-m-d H:i:s', 'log', true);
+
+$log->customLog(function(string $dateTime, string $logText, string $breakLine) {
+	return $logText . ' ' . $dateTime . $breakLine;
+});
+
+$log->error('Custom message, custom format');
+// Print log: var/log/error.log
+// Custom message, custom format [2018-06-16 04:06:25]
+
+```
