@@ -40,10 +40,10 @@ namespace FcPhp\Log
 		 * @param string $directory Directory to write logs
 		 * @return FcPhp\Log\Interfaces\ILog
 		 */
-		public static function getInstance(string $directory, string $extension = 'log')
+		public static function getInstance(string $directory, string $dateFormat = 'Y-m-d H:i:s', string $extension = 'log', bool $debug = false)
 		{
 			if(!self::$instance instanceof ILog) {
-				self::$instance = new Log($directory, true, $extension);
+				self::$instance = new Log($directory, $dateFormat, $extension, $debug);
 			}
 			return self::$instance;
 		}
@@ -83,7 +83,7 @@ namespace FcPhp\Log
 		 * @param string $logText Text to log
 		 * @return void
 		 */
-		private function write(string $fileName, string $logText) :void
+		private function write(string $fileName, string $logText)
 		{
 			if(!$this->debug && !in_array($fileName, $this->nonDebug)) {
 				return true;
