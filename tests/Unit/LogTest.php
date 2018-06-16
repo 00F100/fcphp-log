@@ -37,6 +37,11 @@ class LogTest extends TestCase
 		$this->assertTrue($instance->someExample('Message warning'));
 	}
 
+	public function testMoreError()
+	{
+		$this->assertTrue($this->instance->error('Message error') == null);
+	}
+
 	/**
      * @expectedException FcPhp\Log\Exceptions\NotPermissionToWriteException
      */
