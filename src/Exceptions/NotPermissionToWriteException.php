@@ -2,10 +2,10 @@
 
 namespace FcPhp\Log\Exceptions
 {
-	use Exception;
-	
-	class NotPermissionToWriteException extends Exception
-	{
-		
-	}
+    use Exception;
+    
+    class NotPermissionToWriteException extends Exception
+    {
+        
+    }
 }

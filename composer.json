@@ -1,7 +1,7 @@
 {
     "name": "00f100/fcphp-log",
     "type": "package",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "Logs for application fcphp",
     "keywords": ["logs", "application", "php", "fcphp"],
     "homepage": "https://github.com/00f100/fcphp-log",

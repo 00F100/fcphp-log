@@ -16,9 +16,9 @@ or add in composer.json
 
 ```json
 {
-	"require": {
-		"00f100/fcphp-log": "*"
-	}
+    "require": {
+        "00f100/fcphp-log": "*"
+    }
 }
 ```
 
@@ -33,15 +33,15 @@ use \FcPhp\Log\Log;
 
 /*
 
-	Method to return instance of Log
-	
-	@param string $directoryOutput Directory to write logs
-	@param string|bool $dateFormat Format of date to print log. If `false` not print date
-	@param string $extension Extension of file log
-	@param bool $debug Enable debug mode
-	@return FcPhp\Log\Interfaces\ILog
+    Method to return instance of Log
+    
+    @param string $directoryOutput Directory to write logs
+    @param string|bool $dateFormat Format of date to print log. If `false` not print date
+    @param string $extension Extension of file log
+    @param bool $debug Enable debug mode
+    @return FcPhp\Log\Interfaces\ILog
 
-	Log::getInstance(string $directoryOutput, $dateFormat = 'Y-m-d H:i:s', string $extension = 'log', bool $debug = false) :ILog
+    Log::getInstance(string $directoryOutput, $dateFormat = 'Y-m-d H:i:s', string $extension = 'log', bool $debug = false) :ILog
 
 */
 
@@ -79,7 +79,7 @@ use \FcPhp\Log\Log;
 $log = Log::getInstance('var/log', 'Y-m-d H:i:s', 'log', true);
 
 $log->customLog(function(string $dateTime, string $logText, string $breakLine) {
-	return $logText . ' ' . $dateTime . $breakLine;
+    return $logText . ' ' . $dateTime . $breakLine;
 });
 
 $log->error('Custom message, custom format');
