@@ -28,6 +28,10 @@ namespace FcPhp\Log
          * @var string
          */
         private $dateFormat;
+        /**
+         * @var string
+         */
+        private $permission;
 
         /**
          * @var FcPhp\Log\Interfaces\ILog
@@ -63,12 +67,13 @@ namespace FcPhp\Log
          * @param bool $debug Flag to turn on debug logs
          * @return void
          */
-        public function __construct(string $directory, string $dateFormat = 'Y-m-d H:i:s', string $extension = 'log', bool $debug = false)
+        public function __construct(string $directory, string $dateFormat = 'Y-m-d H:i:s', string $extension = 'log', bool $debug = false, bool $permission = null)
         {
             $this->debug = $debug;
             $this->directory = $directory;
             $this->extension = $extension;
             $this->dateFormat = $dateFormat;
+            $this->permission = $permission;
             $this->isWritable($directory);
         }
 
@@ -93,15 +98,21 @@ namespace FcPhp\Log
          */
         public function write(string $fileName, string $logText)
         {
+            $setPermission = false;
             if(!$this->debug && !in_array($fileName, $this->nonDebug)) {
                 return true;
             }
             $file = $this->directory . $fileName . '.' . $this->extension;
             if(file_exists($file)) {
                 $this->isWritable($file);
+            } else {
+                $setPermission = true;
             }
             $fopen = fopen($file, 'a');
             fwrite($fopen, $this->createLog($this->getDatetime(), $logText, "\r\n"));
+            if($setPermission && $this->permission) {
+                chmod($file, 0777);
+            }
             fclose($fopen);
         }
 
